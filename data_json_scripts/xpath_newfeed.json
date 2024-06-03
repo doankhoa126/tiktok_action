@@ -1,0 +1,13 @@
+{
+  "xpath_list": [
+    {
+      "xpath_like_icon": "//*[@data-e2e=\"like-icon\"]"
+    },
+    {
+      "xpath_share_icon": "//*[@data-e2e=\"share-icon\"]"
+    },
+    {
+      "xpath_follow_icon": "//*[@data-e2e=\"feed-follow\"]"
+    }
+  ]
+}

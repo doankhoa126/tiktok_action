@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>791</width>
+    <height>360</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: #121212	</string>
+  </property>
+  <widget class="QGroupBox" name="updateXpathRegAccGroupBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>751</width>
+     <height>331</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>12</pointsize>
+    </font>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">color:#E0E0E0</string>
+   </property>
+   <property name="title">
+    <string>Cập nhật xpath</string>
+   </property>
+   <widget class="QLabel" name="nameXpathLabel">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>30</y>
+      <width>81</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #272727;color:#E0E0E0</string>
+    </property>
+    <property name="text">
+     <string>Tên xpath:</string>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="xpathComboBox">
+    <property name="geometry">
+     <rect>
+      <x>128</x>
+      <y>21</y>
+      <width>221</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #272727;color:#E0E0E0</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="currentXpathText">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>90</y>
+      <width>581</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#999999;border-radius:10px;color:#E0E0E0</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="curentXpathLabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>110</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #272727;color:#E0E0E0</string>
+    </property>
+    <property name="text">
+     <string>Xpath hiện tại:</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="updateXpathLabel_3">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #272727;color:#E0E0E0</string>
+    </property>
+    <property name="text">
+     <string>Xpath cập nhật:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="updateXpathText">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>210</y>
+      <width>581</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:#999999;border-radius:10px;color:#E0E0E0</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="updateXpathBtn">
+    <property name="geometry">
+     <rect>
+      <x>650</x>
+      <y>20</y>
+      <width>91</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>14</pointsize>
+     </font>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: #272727;color:#E0E0E0; border-radius:20px
+</string>
+    </property>
+    <property name="text">
+     <string>Lưu</string>
+    </property>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

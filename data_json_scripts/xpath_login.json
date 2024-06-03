@@ -1,0 +1,13 @@
+{
+  "xpath_list": [
+    {
+      "xpath_input_username": "/html/body/div[6]/div[3]/div/div/div/div[1]/div[2]/form/div[1]/input"
+    },
+    {
+      "xpath_input_password": "/html/body/div[6]/div[3]/div/div/div/div[1]/div[2]/form/div[2]/div/input"
+    },
+    {
+      "xpath_submit_btn": "/html/body/div[6]/div[3]/div/div/div/div[1]/div[2]/form/button"
+    }
+  ]
+}

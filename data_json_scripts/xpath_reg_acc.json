@@ -1,0 +1,40 @@
+{
+  "xpath_list": [
+    {
+      "xpath_MonthBirthday": "//*[@id=\"loginContainer\"]/div[1]/form/div[2]/div[1]/div[1]"
+    },
+    {
+      "xpath_ChooseMonthBirthday": "//*[@id=\"Month-options-item-{month}\"]"
+    },
+    {
+      "xpath_DayBirthday": "//*[@id=\"loginContainer\"]/div[1]/form/div[2]/div[2]/div[1]"
+    },
+    {
+      "xpath_ChooseDayBirthday": "//*[@id=\"Day-options-item-{day}\"]"
+    },
+    {
+      "xpath_YearBirthday": "//*[@id=\"loginContainer\"]/div[1]/form/div[2]/div[3]/div[1]"
+    },
+    {
+      "xpath_ChooseYearBirthday": "//*[@id=\"Year-options-item-{year}\"]"
+    },
+    {
+      "xpath_input_email": "//*[@id=\"loginContainer\"]/div[1]/form/div[5]/div/input"
+    },
+    {
+      "xpath_input_password": "//*[@id=\"loginContainer\"]/div[1]/form/div[6]/div/input"
+    },
+    {
+      "xpath_sendCodeBtn": "/html/body/div[1]/div/div[2]/div[1]/form/div[7]/div/button"
+    },
+    {
+      "xpath_inputOTP": "//*[@id=\"loginContainer\"]/div[1]/form/div[7]/div/div/input"
+    },
+    {
+      "xpath_agreebtn": "//*[@id=\"loginContainer\"]/div[1]/form/div[8]/div/label/i"
+    },
+    {
+      "xpath_nextbtn": "//*[@id=\"loginContainer\"]/div[1]/form/button"
+    }
+  ]
+}
