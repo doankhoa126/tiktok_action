@@ -16,19 +16,20 @@ class Login:
 
     def runLogin(self, driver, insGPM, account_group):
         print(account_group)
+        print(insGPM)
         email = account_group[0][0]
         password = account_group[0][1]
         print(email, password)
         xpaths = self.extract_xpaths_from_file(utils.XPATH_LOGIN_JSON)
         driver.get('https://www.tiktok.com/login/phone-or-email/email')
-        xpath_input_username = xpaths['xpath_input_username']
-        insGPM.input_(xpath_input_username, email)
-
+        print('get')
+        # xpath_input_username = xpaths['xpath_input_username']
+        # insGPM.input_(xpath_input_username, email)
+        print('input username')
         xpath_input_password = xpaths['xpath_input_password']
         insGPM.input_(xpath_input_password, password)
         
         xpath_login_btn = xpaths['xpath_submit_btn']
         insGPM.click(xpath_login_btn)
 
-        time.sleep(30)
-        insGPM.close()
+        print('login successful')

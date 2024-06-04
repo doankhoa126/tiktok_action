@@ -1,0 +1,46 @@
+{
+  "actions": [
+    {
+      "nameAcction": "growAcc",
+      "listAcc": [
+        {
+          "time": "",
+          "numberOflike": "",
+          "numberOffollow": "",
+          "numberOfComment": "",
+          "contentOfComment": "",
+          "usernameOrBase": "pokemon\nakagi\nhastagi\nyasuo",
+          "repeat": ""
+        }
+      ]
+    },
+    {
+      "nameAcction": "interactUser",
+      "listAcc": [
+        {
+          "time": "34",
+          "numberOflike": "4",
+          "numberOffollow": "",
+          "numberOfComment": "",
+          "contentOfComment": "",
+          "usernameOrBase": "",
+          "repeat": ""
+        }
+      ]
+    },
+    {
+      "nameAcction": "interactNewfeed",
+      "listAcc": [
+        {
+          "time": "",
+          "numberOflike": "1",
+          "numberOffollow": "1",
+          "numberOfComment": "",
+          "contentOfComment": "",
+          "usernameOrBase": "quanao\nvaydep",
+          "repeat": "2"
+        }
+      ]
+    }
+  ]
+}

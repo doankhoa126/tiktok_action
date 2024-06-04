@@ -152,23 +152,61 @@ class ui_ConfigAcctionTiktok(object):
         }
         action_key = action_map.get(action_name, "unknownAction")
 
-        config_data = {
-            "nameAcction": action_key,
-            "listAcc": [
-                {
-                    "time": self.timeActionText.text(),
-                    "numberOflike": self.liveAcctionText.text(),
-                    "numberOffollow": self.followAcctionText.text(),
-                    "numberOfComment": self.commentAcctionText.text(),
-                    "contentOfComment": self.contentCommentText.toPlainText(),
-                    "usernameOrBase": self.userOrBaseText.toPlainText(),
-                    "repeat": self.numberOfRepetitions.text()
-                }
-            ]
+        new_action_data = {
+            "time": self.timeActionText.text(),
+            "numberOflike": self.liveAcctionText.text(),
+            "numberOffollow": self.followAcctionText.text(),
+            "numberOfComment": self.commentAcctionText.text(),
+            "contentOfComment": self.contentCommentText.toPlainText(),
+            "usernameOrBase": self.userOrBaseText.toPlainText(),
+            "repeat": self.numberOfRepetitions.text()
         }
+
         file_path = utils.CONFIG_ACCTION_TIKTOK
+
+        # Load existing config data
+        try:
+            with open(file_path, "r") as json_file:
+                config_data = json.load(json_file)
+            if "actions" not in config_data:
+                config_data["actions"] = []
+        except FileNotFoundError:
+            config_data = {"actions": []}
+        except json.JSONDecodeError:
+            config_data = {"actions": []}
+
+        # Check if the action already exists and overwrite it
+        action_exists = False
+        for i, action in enumerate(config_data["actions"]):
+            if action["nameAcction"] == action_key:
+                config_data["actions"][i] = {
+                    "nameAcction": action_key,
+                    "listAcc": [new_action_data]
+                }
+                action_exists = True
+                break
+
+        # If the action does not exist, add a new entry
+        if not action_exists:
+            config_data["actions"].append({
+                "nameAcction": action_key,
+                "listAcc": [new_action_data]
+            })
+
+        # Save the updated config data back to the file
         with open(file_path, "w") as json_file:
             json.dump(config_data, json_file, ensure_ascii=False, indent=4)
+
+        # Clear input fields after saving
+        self.timeActionText.clear()
+        self.liveAcctionText.clear()
+        self.followAcctionText.clear()
+        self.commentAcctionText.clear()
+        self.contentCommentText.clear()
+        self.userOrBaseText.clear()
+        self.numberOfRepetitions.clear()
+        self.listActionComboBox.setCurrentIndex(0)  # Optionally reset the combo box to the first item
+
         QtWidgets.QMessageBox.information(None, "Saved", "Lưu thành công")
 
     def retranslateUi(self, DialogConfigAcctionTiktok):

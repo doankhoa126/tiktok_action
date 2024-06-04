@@ -1,13 +1,19 @@
 {
   "xpath_list": [
     {
-      "xpath_like_icon": "//*[@data-e2e=\"like-icon\"]"
+      "xpath_first_video": "/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/div[1]/div[2]/div/video"
+    },
+    {
+      "xpath_like_icon": "/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div[1]/button"
     },
     {
       "xpath_share_icon": "//*[@data-e2e=\"share-icon\"]"
     },
     {
-      "xpath_follow_icon": "//*[@data-e2e=\"feed-follow\"]"
+      "xpath_follow_icon": "/html/body/div[1]/div[2]/div[4]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/button"
+    },
+    {
+      "xpath_down_btn": "/html/body/div[1]/div[2]/div[4]/div/div[1]/button[3]/svg"
     }
   ]
 }

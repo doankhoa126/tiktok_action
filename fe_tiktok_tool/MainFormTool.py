@@ -7,6 +7,8 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtWidgets import QTableWidgetItem
+
 from fe_tiktok_tool.formUI2 import Ui_MainWindow
 import json 
 import os 
@@ -215,6 +217,14 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.startBtn_RegAcc.setEnabled(False)
         self.thread.finished.connect(lambda: self.startBtn_RegAcc.setEnabled(True))
 
+    def update_table_status_tiktokTable(self, account, status):
+        # Update table with account ID and status
+        for row in range(self.tiktokTable.rowCount()):
+            if self.tiktokTable.item(row, 1).text() == account:  # Check if username matches
+                status_item = QTableWidgetItem(status)
+                self.tiktokTable.setItem(row, 3, status_item)  # Update column 3 (index 2)
+                break
+    
     def get_selected_acc_tiktok_data(self):
         data = []
         selected_rows = set()
@@ -242,20 +252,29 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def runActionTikok(self):
         acc_tiktok_data = self.get_selected_acc_tiktok_data()
-        thread_value = self.get_thread_value()
+        thread_value = self.threadValue.text()
 
-        self.thread = QThread()
-        self.worker = TikTokActionWorker(acc_tiktok_data, thread_value)  # Pass data to worker
+        if thread_value == '' or not acc_tiktok_data:
+            # Show warning message box
+            msg = QMessageBox()
+            msg.setText("Please select the number of threads and accounts")
+            msg.setWindowTitle("Warning")
+            msg.exec()
+            return
+
+        self.thread = QtCore.QThread()
+        self.worker = TikTokActionWorker(acc_tiktok_data, thread_value)
 
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.thread.quit)
-        # self.worker.finished.connect(self.worker.deleteLater)
-        # self.thread.finished.connect(self.thread.deleteLater)
 
         self.thread.start()
         self.startBtn_tiktok.setEnabled(False)
         self.thread.finished.connect(lambda: self.startBtn_tiktok.setEnabled(True))
+        self.worker.update_table_signal.connect(self.update_table_status_tiktokTable)
+
+
 
     def on_regAccCombobox_changed(self, index):
         # Get the currently selected item text
@@ -292,6 +311,8 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.liveBtn.clicked.connect(self.open_config_acc_tiktok_form)
         self.startBtn_tiktok.clicked.connect(self.runActionTikok)
 
+
+   
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))

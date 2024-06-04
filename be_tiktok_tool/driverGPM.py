@@ -22,11 +22,14 @@ class DriverGPM():
 
     def __init__(self, proxy, user_agent) -> None:
         self.driver = self.createProfileDriver(proxy=proxy, user_agent=user_agent)
+    
+    def scroll_(self,scroll_distance: int):
+        self.driver.execute_script(f"window.scrollBy(0, {scroll_distance});")
 
     def redirect(self, url: str):
         self.driver.get(url)
 
-    def input_(self, xpath: str, content: str, timeout=2):
+    def input_(self, xpath: str, content: str, timeout=10):
         input_text = WebDriverWait(self.driver, timeout).until(
             EC.presence_of_element_located(
                 (By.XPATH, xpath))
@@ -37,7 +40,7 @@ class DriverGPM():
             input_text.send_keys(char)
             time.sleep(0.1)
 
-    def click(self, xpath: str, timeout=2) -> bool:
+    def click(self, xpath: str, timeout=10) -> bool:
         accept_btn = WebDriverWait(self.driver, timeout).until(
             EC.element_to_be_clickable(
                 (By.XPATH, xpath))
@@ -49,7 +52,6 @@ class DriverGPM():
 
     def close(self):
         self.driver.close()
-        self.deleteProfileGPM()
 
 
     def generate_profile_name(self, length: int):
@@ -111,7 +113,7 @@ class DriverGPM():
             return None
 
         urlStart = 'http://127.0.0.1:19995/api/v3/profiles/start/'
-        urlGetProfile = f'{urlStart}{self.profile_id}?win_scale=0.8&win_pos=300,300'
+        urlGetProfile = f'{urlStart}{self.profile_id}?win_scale=0.8&win_pos=200,200&win_size=1200,800'
         
         try:
             response = requests.get(urlGetProfile)
