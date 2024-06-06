@@ -1,0 +1,56 @@
+[
+  {
+    "name_interaction": "login",
+    "xpath_list": [
+      {
+        "xpath_input_username": "//*[@id=\"loginContainer\"]/div[1]/form/div[1]/input"
+      },
+      {
+        "xpath_input_password": "//*[@id=\"loginContainer\"]/div[1]/form/div[2]/div/input"
+      },
+      {
+        "xpath_submit_btn": "//*[@id=\"loginContainer\"]/div[1]/form/button"
+      },
+      {
+        "xpath_text_check_role": "/html/body/div[1]/div/div[2]/div[1]/form/div[3]/span"
+      }
+    ]
+  },
+  {
+    "name_interaction": "newfeed",
+    "xpath_list": [
+      {
+        "xpath_first_video": "/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/div[1]/div[2]/div/video"
+      },
+      {
+        "xpath_like_icon": "/html/body/div[1]/div[2]/div[4]/div/div[2]/div[1]/div/div[1]/div[2]/div/div[1]/div[1]/button[1]/span"
+      },
+      {
+        "xpath_auto_down_btn": "/html/body/div[1]/div[2]/div[4]/div/div[1]/div[4]/div"
+      },
+      {
+        "xpath_share_icon": "//*[@data-e2e=\"share-icon\"]"
+      },
+      {
+        "xpath_follow_icon": "/html/body/div[1]/div[2]/div[4]/div/div[2]/div[1]/div/div[1]/div[1]/div[1]/div/button"
+      },
+      {
+        "xpath_down_btn": "/html/body/div[1]/div[2]/div[4]/div/div[1]/button[3]/svg"
+      },
+      {
+        "xpath_down_btn2": "2"
+      }
+    ]
+  },
+  {
+    "name_interaction": "growAcc",
+    "xpath_list": [
+      {
+        "xpath_like_video": ""
+      },
+      {
+        "xpath_comment_video": ""
+      }
+    ]
+  }
+]

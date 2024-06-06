@@ -25,13 +25,22 @@ import sys
 from PyQt6.QtCore import QThread
 from fe_tiktok_tool.ConfigAcctionTiktok import ui_ConfigAcctionTiktok 
 from be_tiktok_tool.router_acction import TikTokActionWorker
-
+from be_tiktok_tool.driverGPM import DriverManager
+from fe_tiktok_tool.UpdateXpathTikok import ui_UpdateXpathTikok
 class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
     def __init__(self):
         super(MainForm, self).__init__()
         self.setupUi(self)
         self.thread = None
         self.worker = None
+
+################################--OPEN fORM--######################################################
+##########################################################################################
+    def open_update_xpath_tiktok_form(self):
+        self.update_xpath_tiktok_dialog = QtWidgets.QDialog()
+        self.ui_update_xpath_tiktok = ui_UpdateXpathTikok()
+        self.ui_update_xpath_tiktok.setupUi(self.update_xpath_tiktok_dialog)
+        self.update_xpath_tiktok_dialog.exec()
 
     def open_config_acc_tiktok_form(self):
         self.config_dialog = QtWidgets.QDialog()
@@ -69,6 +78,9 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.ui_input_proxy.setupUi(self.input_proxy_dialog)
         self.input_proxy_dialog.exec()
 
+
+################################--REG ACC TABLE--######################################################
+###################################################################################################
     def display_hotmail_data(self, index):
         selected_group = self.regAccCombobox.itemText(index)
         path_file = utils.HOTMAIL_JSON
@@ -85,22 +97,6 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
                     self.regAccTable.setItem(i, 0, QtWidgets.QTableWidgetItem(hotmail))
                     self.regAccTable.setItem(i, 1, QtWidgets.QTableWidgetItem(password))
     
-    def display_acc_tiktok_data(self, index):
-        selected_group = self.tiktokCombobox.itemText(index)
-        path_file = utils.ACC_TIKTOK_JSON
-        with open(path_file, 'r') as file:
-            data = json.load(file)
-
-        for item in data:
-            if item['groupAcc'] == selected_group:
-                acc_list = item['listAcc']
-                self.tiktokTable.setRowCount(0)
-                for i, acc_item in enumerate(acc_list):
-                    username, password = acc_item['acc'].split('|')
-                    self.tiktokTable.insertRow(i)
-                    self.tiktokTable.setItem(i, 1, QtWidgets.QTableWidgetItem(username))
-                    self.tiktokTable.setItem(i, 2, QtWidgets.QTableWidgetItem(password))
-
     def load_group_hotmail(self):
         path_file = utils.HOTMAIL_JSON
         current_index = self.regAccCombobox.currentIndex()
@@ -119,32 +115,8 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
             print(f"Error decoding JSON from file: {e}")
         except Exception as e:
             print(f"An error occurred: {e}")
-
-    def load_group_acc(self):
-        path_file = utils.ACC_TIKTOK_JSON
-        current_index = self.tiktokCombobox.currentIndex()
-        try:
-            with open(path_file, 'r') as file:
-                data = json.load(file)
-            self.tiktokCombobox.clear()
-            for item in data:
-                group_acc = item.get('groupAcc', '')  # Use .get to handle missing keys
-                self.tiktokCombobox.addItem(group_acc)
-            
-            # Restore previous selection if possible
-            if current_index >= 0 and current_index < self.tiktokCombobox.count():
-                self.tiktokCombobox.setCurrentIndex(current_index)
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON from file: {e}")
-        except Exception as e:
-            print(f"An error occurred: {e}")
-
-    def updateDateTime(self):
-        currentDateTime = QtCore.QDateTime.currentDateTime()
-        currentDateTimeString = currentDateTime.toString("  dd/MM/yyyy  hh:mm:ss")
-        self.dateTimeLable.setText(currentDateTimeString)
-
-    def outputAcctiktok(self):
+    
+    def output_acc_tiktok_reg(self):
         selected_ranges = self.regAccTable.selectedRanges()
         if not selected_ranges:
             self.showMessageBox("No selection", "Chưa chọn dữ liệu")
@@ -173,13 +145,6 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
 
         self.showMessageBox("Success", f"Xuất dữ liệu thành công tại: {file_name}")
 
-    def showMessageBox(self, title, message):
-        msg_box = QtWidgets.QMessageBox()
-        msg_box.setStyleSheet("color: white; background-color: #272727")
-        msg_box.setText(title)
-        msg_box.setInformativeText(message)
-        msg_box.setWindowTitle(title)
-        msg_box.exec()
     def get_selected_reg_acc_data(self):
         data = []
         selected_rows = set()
@@ -196,35 +161,90 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
                     row_data.append("")
             data.append(row_data)
         return data
+    
+    def update_table_regAcc_status(self,index, status):
+        item = QTableWidgetItem(status)  
+        print(item)
+        self.regAccTable.setItem(index, 3, item) 
 
-    def get_thread_value(self):
-        return self.threadValue.text()
-
+    def update_table_password_regAccTable(self,index, password):
+        item = QTableWidgetItem(password)  
+        self.regAccTable.setItem(index, 2, item)
+    def update_table_time_regAccTable(self,index, time):
+        item = QTableWidgetItem(time)  
+        self.regAccTable.setItem(index, 4, item)
     def runRegAcc(self):
-        reg_acc_data = self.get_selected_reg_acc_data()
+        # Get the selected row index
+        selected_index = self.regAccTable.currentIndex().row()
+        if selected_index < 0:
+            print("No row selected.")
+            return
+        data_select = self.regAccTable.selectionModel().selectedRows()
+        # Get the data of the selected row
+        reg_acc_data = [
+            {
+                "email": self.regAccTable.item(index.row(), 0).text(),
+                "password": self.regAccTable.item(index.row(), 1).text(),
+                "index": index.row()  # Include the index
+            }
+            for index in data_select
+        ]
         thread_value = self.get_thread_value()
-
+       
         self.thread = QThread()
-        self.worker = TikTokWorker(reg_acc_data, thread_value)  # Pass data to worker
+        self.worker = TikTokWorker(reg_acc_data, thread_value, self.regAccTable)  # Pass data to worker
 
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
         self.worker.finished.connect(self.thread.quit)
-        # self.worker.finished.connect(self.worker.deleteLater)
-        # self.thread.finished.connect(self.thread.deleteLater)
 
         self.thread.start()
         self.startBtn_RegAcc.setEnabled(False)
         self.thread.finished.connect(lambda: self.startBtn_RegAcc.setEnabled(True))
+        self.worker.update_status.connect(self.update_table_regAcc_status)
+        self.worker.update_password.connect(self.update_table_password_regAccTable)
+        self.worker.update_time.connect(self.update_table_time_regAccTable)
 
-    def update_table_status_tiktokTable(self, account, status):
-        # Update table with account ID and status
-        for row in range(self.tiktokTable.rowCount()):
-            if self.tiktokTable.item(row, 1).text() == account:  # Check if username matches
-                status_item = QTableWidgetItem(status)
-                self.tiktokTable.setItem(row, 3, status_item)  # Update column 3 (index 2)
-                break
-    
+################################--TIKTOK TABLE--######################################################
+##############################################################################################
+    def display_acc_tiktok_data(self, index):
+        selected_group = self.tiktokCombobox.itemText(index)
+        path_file = utils.ACC_TIKTOK_JSON
+        with open(path_file, 'r') as file:
+            data = json.load(file)
+
+        for item in data:
+            if item['groupAcc'] == selected_group:
+                acc_list = item['listAcc']
+                self.tiktokTable.setRowCount(0)
+                for i, acc_item in enumerate(acc_list):
+                    username, password = acc_item['acc'].split('|')
+                    self.tiktokTable.insertRow(i)
+                    self.tiktokTable.setItem(i, 1, QtWidgets.QTableWidgetItem(username))
+                    self.tiktokTable.setItem(i, 2, QtWidgets.QTableWidgetItem(password))
+
+   
+
+    def load_group_acc(self):
+        path_file = utils.ACC_TIKTOK_JSON
+        current_index = self.tiktokCombobox.currentIndex()
+        try:
+            with open(path_file, 'r') as file:
+                data = json.load(file)
+            self.tiktokCombobox.clear()
+            for item in data:
+                group_acc = item.get('groupAcc', '')  # Use .get to handle missing keys
+                self.tiktokCombobox.addItem(group_acc)
+            
+            # Restore previous selection if possible
+            if current_index >= 0 and current_index < self.tiktokCombobox.count():
+                self.tiktokCombobox.setCurrentIndex(current_index)
+        except json.JSONDecodeError as e:
+            print(f"Error decoding JSON from file: {e}")
+        except Exception as e:
+            print(f"An error occurred: {e}")
+
+
     def get_selected_acc_tiktok_data(self):
         data = []
         selected_rows = set()
@@ -249,21 +269,39 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
 
         return data
 
+    def update_table_tiktok_status(self,index, status):
+        item = QTableWidgetItem(status)  
+        print('item',item)
+        self.tiktokTable.setItem(index, 3, item) 
 
+    def update_table_tiktok_profile_id(self,index,profile_id):
+        item = QTableWidgetItem(profile_id)  
+        self.tiktokTable.setItem(index, 0, item)
+    
     def runActionTikok(self):
         acc_tiktok_data = self.get_selected_acc_tiktok_data()
         thread_value = self.threadValue.text()
 
         if thread_value == '' or not acc_tiktok_data:
-            # Show warning message box
             msg = QMessageBox()
             msg.setText("Please select the number of threads and accounts")
             msg.setWindowTitle("Warning")
             msg.exec()
             return
 
+        data_select = self.tiktokTable.selectionModel().selectedRows()
+        acc_tiktok_data = [
+            {
+                "email": self.tiktokTable.item(index.row(), 1).text(),
+                "password": self.tiktokTable.item(index.row(), 2).text(),
+                "index": index.row()
+            }
+            for index in data_select
+        ]
+        thread_value = self.get_thread_value()
+
         self.thread = QtCore.QThread()
-        self.worker = TikTokActionWorker(acc_tiktok_data, thread_value)
+        self.worker = TikTokActionWorker(acc_tiktok_data, thread_value, self.tiktokTable)
 
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.run)
@@ -272,9 +310,33 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.thread.start()
         self.startBtn_tiktok.setEnabled(False)
         self.thread.finished.connect(lambda: self.startBtn_tiktok.setEnabled(True))
-        self.worker.update_table_signal.connect(self.update_table_status_tiktokTable)
+        self.worker.update_status.connect(self.update_table_tiktok_status)
+        self.worker.update_profile_id.connect(self.update_table_tiktok_profile_id)
 
+################################--DISPLAY MAIN FORM--######################################################
+    ######################################################################################
+    def update_date_time_dateTimeLable(self):
+        currentDateTime = QtCore.QDateTime.currentDateTime()
+        currentDateTimeString = currentDateTime.toString("  dd/MM/yyyy  hh:mm:ss")
+        self.dateTimeLable.setText(currentDateTimeString)
 
+   
+
+    def showMessageBox(self, title, message):
+        msg_box = QtWidgets.QMessageBox()
+        msg_box.setStyleSheet("color: white; background-color: #272727")
+        msg_box.setText(title)
+        msg_box.setInformativeText(message)
+        msg_box.setWindowTitle(title)
+        msg_box.exec()
+    
+
+    def get_thread_value(self):
+        return self.threadValue.text()
+
+    
+   
+    
 
     def on_regAccCombobox_changed(self, index):
         # Get the currently selected item text
@@ -283,11 +345,13 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         # Get the currently selected item text
         selected_text = self.tiktokCombobox.currentText()
 
-    
+    def on_endBtn_tiktok_close_all_drivers(self):
+        DriverManager.close_all_drivers()
+
     def setupUi(self, MainWindow):
         super().setupUi(MainWindow)
         self.timer = QtCore.QTimer()
-        self.timer.timeout.connect(self.updateDateTime)
+        self.timer.timeout.connect(self.update_date_time_dateTimeLable)
         self.timer.start(1000)
         self.load_group_hotmail()
         self.load_group_acc()
@@ -301,7 +365,7 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.startBtn_RegAcc.clicked.connect(self.runRegAcc)
         self.addAccBtn.clicked.connect(self.open_input_acc_tiktok_form)
         self.toolSettingRegBtn.clicked.connect(self.open_update_xpath_regacc_form)
-        self.outputAccTiktok.clicked.connect(self.outputAcctiktok)
+        self.outputAccTiktok.clicked.connect(self.output_acc_tiktok_reg)
         self.regAccCombobox.currentIndexChanged.connect(self.on_regAccCombobox_changed)
         self.tiktokCombobox.currentIndexChanged.connect(self.on_tiktokCombobox_changed)
         self.growAccBtn.clicked.connect(self.open_config_acc_tiktok_form)
@@ -310,8 +374,8 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.topicBtn.clicked.connect(self.open_config_acc_tiktok_form)
         self.liveBtn.clicked.connect(self.open_config_acc_tiktok_form)
         self.startBtn_tiktok.clicked.connect(self.runActionTikok)
-
-
+        self.endBtn_tiktok.clicked.connect(self.on_endBtn_tiktok_close_all_drivers)
+        self.toolSettingTiktokBtn.clicked.connect(self.open_update_xpath_tiktok_form)
    
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -356,7 +420,7 @@ class MainForm(QtWidgets.QMainWindow, Ui_MainWindow):
         self.threadLable.setText(_translate("MainWindow", "Số luồng"))
         self.outputAccTiktok.setText(_translate("MainWindow", "Xuất file txt"))
         self.toolSettingRegBtn.setText(_translate("MainWindow", "Cấu hình xpath"))
-
+        self.toolSettingTiktokBtn.setText(_translate("MainWindow", "Cấu hình xpath"))
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()

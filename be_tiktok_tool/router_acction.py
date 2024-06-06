@@ -14,7 +14,7 @@ from be_tiktok_tool.driverGPM import DriverGPM
 from be_tiktok_tool.login import Login
 from be_tiktok_tool.newfeed import NewFeed
 from be_tiktok_tool.Interaction_tiktok import InteractionTikok
-
+from be_tiktok_tool.testLogin2 import Login2
 
 def get_user_agent(file_path):
     print('get_user_agent')
@@ -44,8 +44,10 @@ def get_proxy(file_path):
 class TikTokActionWorker(QObject):
     finished = pyqtSignal()
     progress = pyqtSignal(str)
-    update_table_signal = pyqtSignal(int, str)
-
+    # update_table_signal = pyqtSignal(int, str)
+    update_status  = pyqtSignal(int,str)
+    update_profile_id = pyqtSignal(int,str)
+    
     def extract_xpaths_from_file(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
@@ -53,13 +55,15 @@ class TikTokActionWorker(QObject):
             xpaths = {key: value for item in xpath_list for key, value in item.items()}
         return xpaths
 
-    def __init__(self, reg_acc_data, thread_value):
+    def __init__(self, acc_tiktok_data, thread_value,tiktokTable):
         super().__init__()
-        self.reg_acc_data = reg_acc_data
+        self.acc_tiktok_data = acc_tiktok_data
         self.thread_value = int(thread_value)
         self.account_queue = queue.Queue()
+        self.tiktokTable = tiktokTable
 
-        for account in self.reg_acc_data:
+
+        for account in self.acc_tiktok_data:
             self.account_queue.put(account)
 
     def run(self):
@@ -87,23 +91,31 @@ class TikTokActionWorker(QObject):
             user_agent = get_user_agent(utils.USER_AGENT_TXT)
             print(proxy, user_agent)
 
-            insGPM = DriverGPM(proxy, user_agent)
-            driver = insGPM.driver
+            # insGPM = DriverGPM(proxy, user_agent)
+            # driver = insGPM.driver
+            # profile_id,dr2 = insGPM.createProfileDriver()
 
-            tikokIns = InteractionTikok(driver, insGPM, [account])
-            success = tikokIns.run()
+            # tikokIns = InteractionTikok(driver, insGPM, [account],self.regAccTable,)
+            # success = tikokIns.run()
+            # login_instance = Login(driver, insGPM, [account])
+            driver = webdriver.Chrome()
+            login_instance = Login2(driver, [account])
+            login_instance.update_status_signal.connect(self.update_status)
+            print('self.update_status',self.update_status)
+            login_instance.runLogin()
 
-            if success:
-                self.update_table_signal.emit(account, "success")
-            else:
-                self.update_table_signal.emit(account, "error")
 
-            self.account_queue.task_done()
+            # if success:
+            #     self.update_table_signal.emit(account, "success")
+            # else:
+            #     self.update_table_signal.emit(account, "error")
+
+          
 
     def task_done_callback(self, future):
         # Check if there are more accounts to process
         if not self.account_queue.empty():
-            with ThreadPoolExecutor(max_workers=1) as executor:
+            with ThreadPoolExecutor(max_workers=50) as executor:
                 executor.submit(self.process_task)
 
 

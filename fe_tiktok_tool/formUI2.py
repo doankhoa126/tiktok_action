@@ -107,6 +107,8 @@ class Ui_MainWindow(object):
         self.toolSettingRegBtn.setFont(font)
         self.toolSettingRegBtn.setStyleSheet("background-color: #272727;color:#E0E0E0")
         self.toolSettingRegBtn.setObjectName("toolSettingRegBtn")
+
+
         
 
         # self.toolButtonSettings = QtWidgets.QToolButton(parent=self.tab)
@@ -197,6 +199,15 @@ class Ui_MainWindow(object):
         self.tiktokCombobox.setStyleSheet("background-color: #DDDDDD    ;color:#121212")
         self.tiktokCombobox.setObjectName("tiktokCombobox")
         self.tiktokCombobox.addItem("")
+
+        self.toolSettingTiktokBtn = QtWidgets.QPushButton(parent=self.tab_2)
+        self.toolSettingTiktokBtn.setGeometry(QtCore.QRect(1620, 0, 121, 41))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.toolSettingTiktokBtn.setFont(font)
+        self.toolSettingTiktokBtn.setStyleSheet("background-color: #272727;color:#E0E0E0")
+        self.toolSettingTiktokBtn.setObjectName("toolSettingRegBtn")
+
         self.tiktokTable = QtWidgets.QTableWidget(parent=self.tab_2)
         self.tiktokTable.setGeometry(QtCore.QRect(20, 50, 1441, 681))
         font = QtGui.QFont()

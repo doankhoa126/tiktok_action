@@ -46,10 +46,7 @@ class InteractionTikok:
                 topic_data = list_acc[0]
                 print(topic_data)
 
-                    
-                   
                   
-
                 repeat = topic_data.get('repeat', '1')
                 if repeat == '':
                     repeat = 1 
@@ -58,17 +55,43 @@ class InteractionTikok:
                 password = account_group[0][1]
                 xpaths = self.extract_xpaths_from_file(utils.XPATH_LOGIN_JSON)
                 driver.get('https://www.tiktok.com/login/phone-or-email/email')
+                time.sleep(2)
+                try:
+                    xpath_input_username = xpaths['xpath_input_username']
+                    insGPM.input_(xpath_input_username, email)
+                except: 
+                    print('No found xpath input username')
+                
+                try:
+                    xpath_input_username = '/html/body/div[1]/div/div/div[1]/form/div[1]/input'
+                    insGPM.input_(xpath_input_username, email)
+                except: 
+                    print('No found xpath input username')
+                
+                try:
+                    xpath_input_password = xpaths['xpath_input_password']
+                    insGPM.input_(xpath_input_password, password)
+                except: 
+                    print('No found xpath input pass')
 
-                xpath_input_username = xpaths['xpath_input_username']
-                insGPM.input_(xpath_input_username, email)
-
-                xpath_input_password = xpaths['xpath_input_password']
-                insGPM.input_(xpath_input_password, password)
-
-                xpath_login_btn = xpaths['xpath_submit_btn']
-                insGPM.click(xpath_login_btn)
-
-                time.sleep(5)
+                try:
+                    xpath_input_password = '/html/body/div[1]/div/div/div[1]/form/div[2]/div/input'
+                    insGPM.input_(xpath_input_password, password)
+                except: 
+                    print('No found xpath input pass')
+                
+                try:
+                    xpath_login_btn = xpaths['xpath_submit_btn']
+                    insGPM.click(xpath_login_btn)
+                except:
+                    print('No found xpath login')
+                    
+                try:
+                    xpath_login_btn = '/html/body/div[1]/div/div/div[1]/form/button'
+                    insGPM.click(xpath_login_btn)
+                except:
+                    print('No found xpath login')
+              
                 try:
                     role_text = driver.find_element(By.XPATH, '/html/body/div[1]/div/div[2]/div[1]/form/div[3]/span').text
                     print(role_text)
@@ -77,11 +100,14 @@ class InteractionTikok:
 
                         insGPM.click(xpath_login_btn)  # Retry login
                         time.sleep(5)
+                        print('click1')
                         if role_text == 'Bạn truy cập dịch vụ của chúng tôi quá thường xuyên.' or role_text == 'Người dùng không tồn tại' or role_text == 'Rất tiếc, đã xảy ra lỗi, vui lòng thử lại sau':
                             insGPM.click(xpath_login_btn)
                             time.sleep(3)
+                            print('click2')
                             if role_text == 'Bạn truy cập dịch vụ của chúng tôi quá thường xuyên.' or role_text == 'Người dùng không tồn tại' or role_text == 'Rất tiếc, đã xảy ra lỗi, vui lòng thử lại sau':
-                                insGPM.click(xpath_login_btn)  # Retry again
+                                insGPM.click(xpath_login_btn)
+                                print('click3')  # R   # Retry again
 
                 except Exception as e:
                     print(f"Exception while checking role text: {e}")
@@ -100,14 +126,30 @@ class InteractionTikok:
                             random_value_topic = random.choice(values)
                             print(f"Selected topic: {random_value_topic}")
                     else:
-                        random_value_topic = '1'  # Nếu 'usernameOrBase' trống thì cũng gán giá trị mặc định là 1
+                        random_value_topic = '1' 
                         print("The 'usernameOrBase' key is empty or not present.")
 
-                    # Click on the first video
-                    xpath_first_video = '/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/div[1]/div[2]'
-                    insGPM.click(xpath_first_video)
+                    time.sleep(8)
+                    try:
+                        xpath_first_video = '/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div/div[1]/div[2]'
+                        insGPM.click(xpath_first_video)
+                    except:
+                        print('No found xpath')
+                    time.sleep(1)
+                    try:
+                        xpath_first_video2 = '/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div[2]/div[1]/div'
+                        insGPM.click(xpath_first_video2)
+                    except:
+                        print('No found xpath')
 
-                    # Click on the auto down button
+                       
+                    try:
+                        xpath_first_video3 = '/html/body/div[1]/div[2]/div[2]/div[1]/div[1]/div/div/div[1]/div/div[1]/div[2]'
+                        insGPM.click(xpath_first_video3)
+                    except:
+                        print('No found xpath')
+
+                    time.sleep(3)
                     xpath_auto_down_btn = '/html/body/div[1]/div[2]/div[4]/div/div[1]/div[4]/div'
                     insGPM.click(xpath_auto_down_btn)
                     print('Clicked on video')
@@ -152,11 +194,20 @@ class InteractionTikok:
                         xpath_find_btn = '/html/body/div[1]/div[1]/div/div[2]/div/form/button'
                         insGPM.click(xpath_find_btn)
                         time.sleep(3)
-                        # Click on the first video found
-                        first_video_find = '/html/body/div[1]/div[2]/div[2]/div[1]/div[2]/div/div/div[1]/div[1]/div/div/a/div/div[1]'
-                        insGPM.click(first_video_find)
-                        print('Found topic')
-                        time.sleep(3)
+                        try:
+                            first_video_find = '/html/body/div[1]/div[2]/div[2]/div[1]/div[2]/div/div/div[1]/div[1]/div/div/a/div/div[1]'
+                            insGPM.click(first_video_find)
+                            print('Found topic')
+                        except Exception as e:
+                            print(e)
+                        
+                        try: 
+                            first_video_find = '/html/body/div[1]/div[2]/div[2]/div[1]/div[2]/div/div/div[3]/div[1]/div/div/a/div'
+                            insGPM.click(first_video_find)
+                            print('Found topic')
+                            time.sleep(3)
+                        except Exception as e:
+                            print(e)
                         # Interact with the video again
                         for item in list_acc:
                             numberOfLike = int(item.get('numberOflike', 0))

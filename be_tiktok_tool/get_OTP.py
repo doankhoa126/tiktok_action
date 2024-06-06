@@ -88,8 +88,3 @@ def verifiedTiktok(username, password):
         mail.logout()
         return None
 
-# Example usage
-username = 'galindez7us@hotmail.com'
-password = 'GWvPTboy4DF1'
-verified_code = verifiedTiktok(username, password)
-print(f"Verified Code: {verified_code}")
